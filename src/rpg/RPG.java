@@ -55,23 +55,31 @@ public class RPG {
 			new Battle(player, boss1, boss2),
 			new Battle(player, boss3)
 		};
-		Dangeon dangeon = new Dangeon(battle);
+		Dangeon dangeon = new Dangeon("テストダンジョン", battle);
+		int battleIndex = 0;
+		int battleNum = dangeon.getBattleNum();
+		Battle currentBattle = dangeon.getBattle(0);
+		System.out.println(dangeon.toString());
 		
 		Scanner s = new Scanner(System.in);
 		while(true){
-			System.out.println(dangeon.toString());
+			System.out.println(currentBattle.toString());
 			CommandList command = getCommand(s.nextLine());
-			dangeon.playerTurn(command);
-			if(dangeon.cleared()){
-				System.out.println("YOU WIN!!");
-				break;
-			}else if(dangeon.wonBattle()){
-				System.out.println("Battle " + (dangeon.getCurrentBattleIndex()+1) + "/" 
-						+dangeon.getBattleNum() + "clear!");
-				dangeon.nextBattle();
+			currentBattle.playerTurn(command);
+			if(currentBattle.won()){
+				battleIndex++;
+				if(battleIndex == battleNum){
+					System.out.println("YOU WIN!!");
+					break;
+				}else{
+					System.out.println("Battle " + battleIndex + "/" 
+							+battleNum + "clear!");
+				
+					currentBattle = dangeon.getBattle(battleIndex);
+				}
 			}else{
-				dangeon.enemyTurn();
-				if(dangeon.lose()){
+				currentBattle.enemyTurn();
+				if(currentBattle.lose()){
 					System.out.println("YOU LOSE...");
 					break;
 				}
