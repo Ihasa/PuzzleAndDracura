@@ -185,8 +185,20 @@ public class Field{
 		}
 	}
 	
+	
+	private boolean existsEmpty(){
+		for(int y = 0; y < height; y++){
+			for(int x = 0; x < width; x++){
+				if(blocks[y][x].color == BlockColor.EMPTY){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	public boolean select(int x, int y){
-		if(!cursor.selected && x >= 0 && x < width && y >= 0 && y < height){
+		if(!cursor.selected && x >= 0 && x < width && y >= 0 && y < height &&
+			!existsEmpty() && !existsEraseable()){
 			cursor.select(x, y);
 			return true;
 		}
