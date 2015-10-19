@@ -19,4 +19,16 @@ public class FieldState{
 	public Cursor getCursor(){
 		return cursor;
 	}
+	public boolean equals(Object obj){
+		if(obj instanceof FieldState)
+			return false;
+		FieldState ope = (FieldState)obj;
+		for(int y = 0; y < height; y++){
+			for(int x = 0; x < width; x++){
+				if(ope.field[y][x] != field[y][x])
+					return false;
+			}
+		}
+		return true;
+	}
 }
