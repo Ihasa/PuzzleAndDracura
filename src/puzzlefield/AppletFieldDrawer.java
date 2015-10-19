@@ -37,6 +37,9 @@ public class AppletFieldDrawer{
 		}
 	}
 	
+	//Empty -> X ...落下アニメーション
+	//X -> Empty ...消滅アニメーション
+	//X -> Y     ...入れ替え(フィールド上にEmptyなし)or落下アニメーション(同y軸上にEmptyあり)
 	private FieldState prevState = null;
 	public void draw(FieldState fState, boolean repaint){
 		//super.draw(fState);
@@ -45,22 +48,35 @@ public class AppletFieldDrawer{
 			return;
 		}
 		//g.clearRect(0, 0, blockWidth * fState.width, blockHeight * fState.height);
-		for(int y = 0; y < fState.height; y++){
-			for(int x = 0; x < fState.width; x++){
-				//最初やrepaint命令時は全部描画
-				if(repaint || prevState == null){
-					drawBlock(g, x, y, fState);
-				}else{
-					//差分があった場合のみ描画
-					if(stateChanged(fState, x, y)){
-						g.clearRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-						drawBlock(g, x, y, fState);
-					}
-				}
-			}
+		
+		//最初やrepaint命令時は全部描画
+		if(repaint || prevState == null){
+			drawAllBlocks(fState, g);			
+		}else if(!fState.equals(prevState)){//差分があった場合に差分があったところのみ描画
+			drawUpdatedBlocks(fState, g);
 		}
 		prevState = fState;
 	}
+
+	private void drawAllBlocks(FieldState fState, Graphics g) {
+		for(int y = 0; y < fState.height; y++){
+			for(int x = 0; x < fState.width; x++){
+				drawBlock(g, x, y, fState);
+			}
+		}
+	}
+
+	private void drawUpdatedBlocks(FieldState fState, Graphics g) {
+		for(int y = 0; y < fState.height; y++){
+			for(int x = 0; x < fState.width; x++){
+				if(stateChanged(fState, x, y)){
+					g.clearRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+					drawBlock(g, x, y, fState);
+				}
+			}
+		}
+	}
+	
 	private void drawBlock(Graphics g, int x, int y, FieldState fState){
 		BlockColor color = fState.get(x, y);
 		Cursor cursor = fState.getCursor();
@@ -73,6 +89,7 @@ public class AppletFieldDrawer{
 			g.drawImage(img[imgIndex], x * blockWidth, y * blockHeight, blockWidth, blockHeight, applet);
 		}
 	}
+	
 	private boolean stateChanged(FieldState current, int x, int y){
 		Cursor curCursor = current.getCursor();
 		Cursor prevCursor = prevState.getCursor();
