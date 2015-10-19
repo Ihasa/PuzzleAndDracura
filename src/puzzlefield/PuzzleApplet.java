@@ -64,20 +64,15 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	private void eraceBlocks(){
 		combo = 0;
 		while(field.checkEraceable()){
-			try{
-				field.erase();
-				fieldDrawer.draw(field.getFieldState(), false);
-				combo += field.getCombo();
-				msgBox.draw(combo + " Combo");
-				Thread.sleep(1000);
+			field.erase();
+			fieldDrawer.draw(field.getFieldState(), false);
+			combo += field.getCombo();
+			msgBox.draw(combo + " Combo");
 			
-				field.drop();
-				field.fill();
+			field.drop();
+			field.fill();
 
-				fieldDrawer.draw(field.getFieldState(), false);
-				Thread.sleep(1000);
-			}catch(Exception e){
-			}
+			fieldDrawer.draw(field.getFieldState(), false);			
 		}
 	}
 	
