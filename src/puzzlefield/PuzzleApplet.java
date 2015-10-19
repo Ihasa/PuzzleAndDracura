@@ -16,7 +16,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	
 	private Field field;
 	private AppletFieldDrawer fieldDrawer;
-	private StringDrawer comboDrawer;
+	private AppletMessageBox msgBox;
 	
 	private int currentMouseGridX = -1;
 	private int currentMouseGridY = -1;
@@ -25,7 +25,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	    
 	    field = new Field(FIELD_GRIDS_X, FIELD_GRIDS_Y);
 	    fieldDrawer = new AppletFieldDrawer(this,BLOCK_WIDTH, BLOCK_HEIGHT);
-	    comboDrawer = new StringDrawer(this, 0, FIELD_HEIGHT);
+	    msgBox = new AppletMessageBox(this, 0, 0);
 	    
 	    addMouseListener(this);
 	    addMouseMotionListener(this);
@@ -68,7 +68,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 				field.erase();
 				fieldDrawer.draw(field.getFieldState(), false);
 				combo += field.getCombo();
-				comboDrawer.draw(combo + " Combo");
+				msgBox.draw(combo + " Combo");
 				Thread.sleep(1000);
 			
 				field.drop();

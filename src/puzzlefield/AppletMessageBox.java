@@ -2,11 +2,11 @@ package puzzlefield;
 import java.applet.Applet;
 import java.awt.Graphics;
 
-public class StringDrawer {
+public class AppletMessageBox {
 	private Applet applet;
 	private int x;
 	private int y;
-	public StringDrawer(Applet app, int ix, int iy){
+	public AppletMessageBox(Applet app, int ix, int iy){
 		applet = app;
 		x = ix;
 		y = iy;
