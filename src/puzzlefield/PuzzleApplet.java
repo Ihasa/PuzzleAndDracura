@@ -104,7 +104,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 		int gridY = getGridY(mouseY);
 		
 		if(field.select(gridX, gridY)){
-			System.out.println("YEY:" + gridX + ", " + gridY);
+			//System.out.println("YEY:" + gridX + ", " + gridY);
 			setCurrentMouseGrid(gridX, gridY);
 		}
 	}
@@ -116,9 +116,9 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 		int gridX = getGridX(mouseX);
 		int gridY = getGridY(mouseY);
 		
-		int dx = gridX - currentMouseGridX;
-		int dy = gridY - currentMouseGridY;
 		if(field.isSelected()){
+			int dx = gridX - currentMouseGridX;
+			int dy = gridY - currentMouseGridY;
 			if(dx != 0 || dy != 0){
 				if(dx == -1)
 					field.moveLeft();
@@ -132,14 +132,14 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 				
 				fieldDrawer.draw(field.getFieldState(), false);
 				
-				System.out.println("moved");
+				//System.out.println("moved");
 			}		
 		}
 		setCurrentMouseGrid(gridX, gridY);
 		
-		if(dx != 0 || dy != 0){
+		/*if(dx != 0 || dy != 0){
 			System.out.println("dx = " + dx + ", dy = " + dy);
-		}
+		}*/
 	}
 	
 	@Override
@@ -148,7 +148,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 			field.release();
 			eraceBlocks();
 		}
-		System.out.println("released");
+		//System.out.println("released");
 	}
 	
 	@Override
