@@ -1,12 +1,13 @@
 package puzzlefield;
-import java.applet.Applet;
+
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Panel;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-public class PuzzleApplet extends Applet implements MouseListener, MouseMotionListener{
+public class PuzzleApplet extends Panel implements MouseListener, MouseMotionListener{
 	private static final int BLOCK_WIDTH = 64;
 	private static final int BLOCK_HEIGHT = 64;
 	private static final int FIELD_GRIDS_X = 6;

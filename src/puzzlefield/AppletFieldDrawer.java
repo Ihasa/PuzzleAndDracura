@@ -1,17 +1,18 @@
 package puzzlefield;
-import java.applet.Applet;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Panel;
 
 public class AppletFieldDrawer{
 	private static Image[] img;
 	private int blockWidth;
 	private int blockHeight;
-	private Applet applet;
+	private Panel panel;
 	
-	public AppletFieldDrawer(Applet app, int bWidth, int bHeight){
-		applet = app;
+	public AppletFieldDrawer(Panel p, int bWidth, int bHeight){
+		panel = p;
 		blockWidth = bWidth;
 		blockHeight = bHeight;
 		
@@ -31,7 +32,7 @@ public class AppletFieldDrawer{
 	private Image loadImage(String name) {
 		try {
 		    java.net.URL url = getClass().getResource(name);
-		    return applet.createImage((java.awt.image.ImageProducer) url.getContent());
+		    return panel.createImage((java.awt.image.ImageProducer) url.getContent());
 		} catch (Exception ex) {
 		    return null;
 		}
@@ -40,7 +41,7 @@ public class AppletFieldDrawer{
 	private FieldState prevState = null;
 	public void draw(FieldState fState, boolean repaint){
 		//super.draw(fState);
-		Graphics g = applet.getGraphics();
+		Graphics g = panel.getGraphics();
 		if(g == null){
 			return;
 		}
@@ -70,7 +71,7 @@ public class AppletFieldDrawer{
 				g.fillRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
 			}
 			int imgIndex = color.ordinal();
-			g.drawImage(img[imgIndex], x * blockWidth, y * blockHeight, blockWidth, blockHeight, applet);
+			g.drawImage(img[imgIndex], x * blockWidth, y * blockHeight, blockWidth, blockHeight, panel);
 		}
 	}
 	private boolean stateChanged(FieldState current, int x, int y){
