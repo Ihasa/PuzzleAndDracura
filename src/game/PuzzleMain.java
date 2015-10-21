@@ -7,8 +7,14 @@ import puzzlefield.PuzzleApplet;
 
 public class PuzzleMain {
 	public static void main(String[] args) {
-		int w = 320;
-		int h = 480;
+		int w, h;
+		try{
+			w = Integer.parseInt(args[0]);
+			h = Integer.parseInt(args[1]);
+		}catch(Exception e){
+			w = 64 * 6;
+			h = 64 * 5;
+		}
 		JFrame frame = new JFrame();
 		frame.setVisible(true);
 		Insets i = frame.getInsets();
