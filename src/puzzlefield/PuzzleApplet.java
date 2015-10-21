@@ -8,12 +8,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public class PuzzleApplet extends Panel implements MouseListener, MouseMotionListener{
-	private static final int BLOCK_WIDTH = 64;
-	private static final int BLOCK_HEIGHT = 64;
+	private int BLOCK_WIDTH;
+	private int BLOCK_HEIGHT;
 	private static final int FIELD_GRIDS_X = 6;
 	private static final int FIELD_GRIDS_Y = 5;
-	private static final int FIELD_WIDTH = BLOCK_WIDTH * FIELD_GRIDS_X;
-	private static final int FIELD_HEIGHT = BLOCK_HEIGHT * FIELD_GRIDS_Y;
+	private int FIELD_WIDTH;
+	private int FIELD_HEIGHT;
 	
 	private Field field;
 	private AppletFieldDrawer fieldDrawer;
@@ -22,11 +22,28 @@ public class PuzzleApplet extends Panel implements MouseListener, MouseMotionLis
 	private int currentMouseGridX = -1;
 	private int currentMouseGridY = -1;
 	public PuzzleApplet(){
-	    setSize(FIELD_WIDTH, FIELD_HEIGHT);
-	    
+	    this(64 * FIELD_GRIDS_X, 64 * FIELD_GRIDS_Y);
+	}
+	public PuzzleApplet(int width, int height){
+		
+		/*int blockSizeW = width / FIELD_GRIDS_X;
+		int blockSizeH = height / FIELD_GRIDS_Y;
+		if(blockSizeW == blockSizeH){
+			BLOCK_WIDTH = BLOCK_HEIGHT = blockSizeW;
+		}else if(blockSizeW > blockSizeH){
+			BLOCK_WIDTH = BLOCK_HEIGHT = blockSizeH;
+		}else{
+			BLOCK_WIDTH = BLOCK_HEIGHT = blockSizeW;
+		}*/
+		BLOCK_WIDTH = BLOCK_HEIGHT = Math.min(width / FIELD_GRIDS_X, height / FIELD_GRIDS_Y);
+		FIELD_WIDTH = BLOCK_WIDTH * FIELD_GRIDS_X;
+		FIELD_HEIGHT = BLOCK_HEIGHT * FIELD_GRIDS_Y;
+
+		setSize(FIELD_WIDTH, FIELD_HEIGHT);
+
 	    field = new Field(FIELD_GRIDS_X, FIELD_GRIDS_Y);
 	    fieldDrawer = new AppletFieldDrawer(this,BLOCK_WIDTH, BLOCK_HEIGHT);
-	    comboDrawer = new StringDrawer(this, 0, FIELD_HEIGHT);
+	    comboDrawer = new StringDrawer(this, 0, 0);
 	    
 	    addMouseListener(this);
 	    addMouseMotionListener(this);
