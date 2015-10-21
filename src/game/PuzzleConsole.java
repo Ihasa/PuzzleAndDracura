@@ -1,5 +1,9 @@
-package puzzlefield;
+package game;
 import java.util.Scanner;
+
+import puzzlefield.ErasedBlockInfo;
+import puzzlefield.Field;
+import puzzlefield.FieldDrawer;
 
 public class PuzzleConsole{
 	static void update(Field f, FieldDrawer drawer){
