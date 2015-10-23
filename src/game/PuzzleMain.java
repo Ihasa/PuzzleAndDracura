@@ -21,6 +21,6 @@ public class PuzzleMain {
 		frame.setSize(w + i.left + i.right, h + i.top + i.bottom);
 		PuzzleApplet puzzle = new PuzzleApplet(w,h);
 		frame.add(puzzle);
-		//frame.setDefaultCloseOperation(0);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }
