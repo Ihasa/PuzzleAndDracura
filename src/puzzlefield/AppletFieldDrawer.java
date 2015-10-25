@@ -3,11 +3,13 @@ import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.util.ArrayList;
+import java.util.List;
 
-public class AppletFieldDrawer{
-	private static Image[] img;
-	private int blockWidth;
-	private int blockHeight;
+public abstract class AppletFieldDrawer{
+	protected static Image[] img;
+	protected int blockWidth;
+	protected int blockHeight;
 	private Applet applet;
 	
 	public AppletFieldDrawer(Applet app, int bWidth, int bHeight){
@@ -37,75 +39,45 @@ public class AppletFieldDrawer{
 		}
 	}
 			
-	Thread th = null;
 	//事後条件：描画後のフィールドがfStateに基づいたものになっていること
 	private FieldState prevState = null;
-	public void draw(FieldState fState, boolean repaint){
-		//super.draw(fState);
-		if(th != null){
-			//アニメーション中断して前の状態を描ききる
-			
-		}
-		th = new AnimationThread(fState, prevState != null ? prevState : fState, blockWidth, blockHeight, applet, img);
-		th.start();
+	public final void draw(FieldState fState, boolean repaint){
+//		//super.draw(fState);
+//		if(th != null){
+//			//アニメーション中断して前の状態を描ききる
+//			
+//		}
+//		th = new AnimationThread(fState, prevState != null ? prevState : fState, blockWidth, blockHeight, applet, img);
+//		th.start();
 //		try {
 //			th.join();
 //		} catch (InterruptedException e) {
 //			System.out.println("interrupt!!");
 //		}
+		Graphics g = applet.getGraphics();
+		if(g == null){
+			return;
+		}
+		//g.clearRect(0, 0, blockWidth * fState.width, blockHeight * fState.height);
+		
+		//最初やrepaint命令時は全部描画
+		if(repaint || prevState == null){
+			drawAllBlocks(g, fState);
+		}else{
+			FieldIndex[] diff = fState.getDiff(prevState);
+			if(diff.length > 0){//差分があった場合に差分があったところのみ描画
+				drawUpdatedBlocks(g, fState, prevState, diff);
+			}
+		}
 		prevState = fState;
-//		Graphics g = applet.getGraphics();
-//		if(g == null){
-//			return;
-//		}
-//		//g.clearRect(0, 0, blockWidth * fState.width, blockHeight * fState.height);
-//		
-//		//最初やrepaint命令時は全部描画
-//		if(repaint || prevState == null){
-//			drawAllBlocks(fState, g);			
-//		}else if(!fState.equals(prevState)){//差分があった場合に差分があったところのみ描画
-//			drawUpdatedBlocks(fState, g);
-//		}
-//		prevState = fState;
 	}
-
-	private void drawAllBlocks(FieldState fState, Graphics g) {
-		for(int y = 0; y < fState.height; y++){
-			for(int x = 0; x < fState.width; x++){
-				drawBlock(g, x, y, fState);
-			}
-		}
-	}
-
-	private void drawUpdatedBlocks(FieldState fState, Graphics g) {
-		for(int y = 0; y < fState.height; y++){
-			for(int x = 0; x < fState.width; x++){
-				if(stateChanged(fState, x, y)){
-					g.clearRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-					drawBlock(g, x, y, fState);
-				}
-			}
-		}
-	}
+	abstract protected void drawAllBlocks(Graphics g, FieldState current);
+	abstract protected void drawUpdatedBlocks(Graphics g, FieldState current, FieldState prev, FieldIndex[] diff);
 	
-	private void drawBlock(Graphics g, int x, int y, FieldState fState){
-		BlockColor color = fState.get(x, y);
-		Cursor cursor = fState.getCursor();
-		if(color != BlockColor.EMPTY){
-			if(cursor.selected && cursor.x == x && cursor.y == y){
-				g.setColor(Color.MAGENTA);
-				g.fillRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-			}
-			int imgIndex = color.ordinal();
-			g.drawImage(img[imgIndex], x * blockWidth, y * blockHeight, blockWidth, blockHeight, applet);
-		}
-	}
-	
-	private boolean stateChanged(FieldState current, int x, int y){
-		Cursor curCursor = current.getCursor();
-		Cursor prevCursor = prevState.getCursor();
-		return current.get(x, y) != prevState.get(x, y) || 
-				(curCursor.x == x && curCursor.y == y) ||
-				(prevCursor.x == x && prevCursor.y == y);
+	protected void drawBlockImage(Graphics g, BlockColor color, int x, int y, int width, int height){
+		if(color == BlockColor.EMPTY)
+			return;
+		int imgIndex = color.ordinal();
+		g.drawImage(img[imgIndex], x, y, width, height, applet);		
 	}
 }

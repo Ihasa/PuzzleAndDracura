@@ -24,7 +24,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	    setSize(FIELD_WIDTH, FIELD_HEIGHT);
 	    
 	    field = new Field(FIELD_GRIDS_X, FIELD_GRIDS_Y);
-	    fieldDrawer = new AppletFieldDrawer(this,BLOCK_WIDTH, BLOCK_HEIGHT);
+	    fieldDrawer = new SimpleFieldDrawer(this,BLOCK_WIDTH, BLOCK_HEIGHT);
 	    msgBox = new AppletMessageBox(this, 0, 0);
 	    
 	    addMouseListener(this);
@@ -62,6 +62,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	
 	private int combo = 0;
 	private void eraceBlocks(){
+		fieldDrawer.draw(field.getFieldState(), false);
 		combo = 0;
 		while(field.checkEraceable()){
 			field.erase();
