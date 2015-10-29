@@ -52,7 +52,6 @@ public class FieldState{
 		Cursor c1 = getCursor();
 		Cursor c2 = state2.getCursor();
 		return get(x, y) != state2.get(x, y) || 
-				c1.selected != c2.selected || 
 				(c1.x == x && c1.y == y && (c2.x != x || c2.y != y)) ||
 				(c2.x == x && c2.y == y && (c1.x != x || c1.y != y));
 	}
