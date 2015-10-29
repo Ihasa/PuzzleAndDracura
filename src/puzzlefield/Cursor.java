@@ -1,8 +1,8 @@
 package puzzlefield;
 
 public class Cursor implements Cloneable{
-	public int x;
-	public int y;
+	public int x = -1;
+	public int y = -1;
 	public boolean selected = false;
 	public void move(int dx, int dy){
 		x += dx;
