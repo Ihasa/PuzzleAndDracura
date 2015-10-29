@@ -10,7 +10,7 @@ public abstract class AppletFieldDrawer{
 	protected static Image[] img;
 	protected int blockWidth;
 	protected int blockHeight;
-	private Applet applet;
+	protected Applet applet;
 	
 	public AppletFieldDrawer(Applet app, int bWidth, int bHeight){
 		applet = app;
