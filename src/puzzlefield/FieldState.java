@@ -51,8 +51,8 @@ public class FieldState{
 	private boolean stateChanged(FieldState state2, int x, int y){
 		Cursor c1 = getCursor();
 		Cursor c2 = state2.getCursor();
-		return get(x, y) != state2.get(x, y) || 
+		return get(x, y) != state2.get(x, y);/* || 
 				(c1.x == x && c1.y == y && (c2.x != x || c2.y != y)) ||
-				(c2.x == x && c2.y == y && (c1.x != x || c1.y != y));
+				(c2.x == x && c2.y == y && (c1.x != x || c1.y != y));*/
 	}
 }

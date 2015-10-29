@@ -15,6 +15,8 @@ public class Cursor implements Cloneable{
 	}
 	public void release(){
 		selected = false;
+		x = -1;
+		y = -1;
 	}
 	public Object clone(){
 		Cursor c = new Cursor();

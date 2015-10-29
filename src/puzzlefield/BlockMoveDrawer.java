@@ -31,13 +31,36 @@ public class BlockMoveDrawer extends AppletFieldDrawer{
 	
 	Animation th;
 	@Override
-	protected void drawUpdatedBlocks(Graphics g, FieldState current, FieldState prev, FieldIndex[] diff) {
-		th = new Animation((frame, allFrame)->{
-			g.clearRect(0, 150, 200, 20);
-			g.drawString("x = " + ((float)frame / allFrame), 0, 170);
+	protected void drawUpdatedBlocks(Graphics graphics, FieldState currentState, FieldState prev, FieldIndex[] diff) {
+		th = new Animation((frames, allFrames)->{
+			if(diff.length != 2)
+				return;
+			for(FieldIndex idx:diff){
+				graphics.clearRect(idx.x * blockWidth, idx.y * blockHeight, blockWidth, blockHeight);
+			}
+			FieldIndex idx1 = diff[0];
+			FieldIndex idx2 = diff[1];
+			float rate = frames / (float)allFrames;
+//			Cursor cursor = currentState.getCursor();
+			
+//			if(cursor.selected){
+//				graphics.setColor(Color.MAGENTA);
+//				graphics.fillRect(cursor.x * blockWidth, cursor.y * blockHeight, blockWidth, blockHeight);
+//			}
 
-			System.out.println("x = " + ((float)frame / allFrame));
-		}, 1000, 20);
+			this.drawBlockImage(graphics, currentState.get(idx1.x,idx1.y), 
+					(int)(blockWidth * (idx1.x + (idx2.x - idx1.x) * rate)),
+					(int)(blockHeight * (idx1.y + (idx2.y - idx1.y) * rate)),
+					blockWidth,
+					blockHeight
+					);
+			this.drawBlockImage(graphics, currentState.get(idx2.x,idx2.y), 
+					(int)(blockWidth * (idx2.x + (idx1.x - idx2.x) * rate)),
+					(int)(blockHeight * (idx2.y + (idx1.y - idx2.y) * rate)),
+					blockWidth, 
+					blockHeight
+					);
+		}, 120);
 		th.start();
 		
 	}	
@@ -47,14 +70,13 @@ interface Job{
 }
 class Animation extends Thread{
 	Job job;
-	int ms;
-	int dt;
-	int frames;
-	int currentFrame;
-	public Animation(Job j, int timeInMillis, int sleepTime){
+	private int ms;
+	private static final int dt = 20;
+	private int frames;
+	private int currentFrame;
+	public Animation(Job j, int timeInMillis){
 		job = j;
 		ms = timeInMillis;
-		dt = sleepTime;
 		frames = ms / dt;
 		currentFrame = frames;
 	}
