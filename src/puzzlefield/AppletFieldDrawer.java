@@ -39,9 +39,15 @@ public abstract class AppletFieldDrawer{
 		}
 	}
 			
+	public final void draw(FieldState current){
+		Graphics g = applet.getGraphics();
+		if(g == null)
+			return;
+		drawAllBlocks(g,current);
+	}
 	//事後条件：描画後のフィールドがfStateに基づいたものになっていること
-	private FieldState prevState = null;
-	public final void draw(FieldState fState, boolean repaint){
+	//private FieldState prevState = null;
+	public final void draw(FieldState current, FieldState prev, boolean repaint){
 //		//super.draw(fState);
 //		if(th != null){
 //			//アニメーション中断して前の状態を描ききる
@@ -61,18 +67,20 @@ public abstract class AppletFieldDrawer{
 		//g.clearRect(0, 0, blockWidth * fState.width, blockHeight * fState.height);
 		
 		//最初やrepaint命令時は全部描画
-		if(repaint || prevState == null){
-			drawAllBlocks(g, fState);
-		}else{
-			FieldIndex[] diff = fState.getDiff(prevState);
+//		if(repaint){
+//			drawAllBlocks(g, current);
+//		}else{
+			FieldIndex[] diff = getDiff(current, prev);
 			if(diff.length > 0){//差分があった場合に差分があったところのみ描画
-				drawUpdatedBlocks(g, fState, prevState, diff);
+				drawUpdatedBlocks(g, current, prev, diff);
 			}
-		}
-		prevState = fState;
+//		}
 	}
 	abstract protected void drawAllBlocks(Graphics g, FieldState current);
 	abstract protected void drawUpdatedBlocks(Graphics g, FieldState current, FieldState prev, FieldIndex[] diff);
+	protected FieldIndex[] getDiff(FieldState current, FieldState prev){
+		return current.getDiff(prev);
+	}
 	
 	protected void drawBlockImage(Graphics g, BlockColor color, int x, int y, int width, int height){
 		if(color == BlockColor.EMPTY)

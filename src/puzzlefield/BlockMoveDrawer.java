@@ -3,6 +3,7 @@ package puzzlefield;
 import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.HashSet;
 
 public class BlockMoveDrawer extends AppletFieldDrawer{
 
@@ -29,6 +30,8 @@ public class BlockMoveDrawer extends AppletFieldDrawer{
 		drawBlockImage(g,color,x * blockWidth,y * blockHeight,blockWidth,blockHeight);
 	}
 	
+	//FieldState.getDiffにおいてカーソル位置の違いも考慮する
+	//カーソル移動があった場所を直接渡してもらう
 	Animation th;
 	@Override
 	protected void drawUpdatedBlocks(Graphics graphics, FieldState currentState, FieldState prev, FieldIndex[] diff) {
@@ -41,8 +44,8 @@ public class BlockMoveDrawer extends AppletFieldDrawer{
 			FieldIndex idx1 = diff[0];
 			FieldIndex idx2 = diff[1];
 			float rate = frames / (float)allFrames;
-//			Cursor cursor = currentState.getCursor();
 			
+//			Cursor cursor = currentState.getCursor();	
 //			if(cursor.selected){
 //				graphics.setColor(Color.MAGENTA);
 //				graphics.fillRect(cursor.x * blockWidth, cursor.y * blockHeight, blockWidth, blockHeight);
@@ -63,7 +66,18 @@ public class BlockMoveDrawer extends AppletFieldDrawer{
 		}, 120);
 		th.start();
 		
-	}	
+	}
+	protected FieldIndex[] getDiff(FieldState current, FieldState prev){
+		Cursor c1 = current.getCursor();
+		Cursor c2 = prev.getCursor();
+		if((c1.x != c2.x || c1.y != c2.y) && c1.selected && c2.selected){
+			return new FieldIndex[]{
+					new FieldIndex(c1.x, c1.y),
+					new FieldIndex(c2.x, c2.y)
+			};
+		}
+		return new FieldIndex[0];
+	}
 }
 interface Job{
 	public void doJob(int currentFrame, int allFrame);
