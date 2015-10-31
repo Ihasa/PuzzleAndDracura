@@ -15,7 +15,9 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	private static final int FIELD_HEIGHT = BLOCK_HEIGHT * FIELD_GRIDS_Y;
 	
 	private Field field;
-	private AppletFieldDrawer fieldDrawer;
+	private AppletFieldDrawer moveDrawer;
+	private AppletFieldDrawer fallDrawer;
+	private AppletFieldDrawer eraceDrawer;
 	private AppletMessageBox msgBox;
 	
 	private int currentMouseGridX = -1;
@@ -24,7 +26,10 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	    setSize(FIELD_WIDTH, FIELD_HEIGHT);
 	    
 	    field = new Field(FIELD_GRIDS_X, FIELD_GRIDS_Y);
-	    fieldDrawer = new BlockMoveDrawer(this,BLOCK_WIDTH, BLOCK_HEIGHT);
+	    
+	    moveDrawer = new BlockMoveDrawer(this,BLOCK_WIDTH, BLOCK_HEIGHT);
+	    fallDrawer = new SimpleFieldDrawer(this,BLOCK_WIDTH,BLOCK_HEIGHT);
+	    eraceDrawer = new SimpleFieldDrawer(this,BLOCK_WIDTH,BLOCK_HEIGHT);
 	    msgBox = new AppletMessageBox(this, 0, 0);
 	    
 	    addMouseListener(this);
@@ -40,7 +45,7 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
     }
 	
 	public void paint(Graphics g){
-		fieldDrawer.draw(field.getFieldState(), true);
+		moveDrawer.draw(field.getFieldState());
 	}
 	
 	/*Thread th;
@@ -62,18 +67,25 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	
 	private int combo = 0;
 	private void eraceBlocks(){
-		fieldDrawer.draw(field.getFieldState(), false);
 		combo = 0;
+		FieldState current;
+		FieldState prev;
 		while(field.checkEraceable()){
+			prev = field.getFieldState();
 			field.erase();
-			fieldDrawer.draw(field.getFieldState(), false);
+			current = field.getFieldState();
+			
+			eraceDrawer.draw(current, prev, false);
+			
 			combo += field.getCombo();
 			msgBox.draw(combo + " Combo");
 			
+			prev = current;
 			field.drop();
 			field.fill();
+			current = field.getFieldState();
 
-			fieldDrawer.draw(field.getFieldState(), false);			
+			fallDrawer.draw(current, prev, false);			
 		}
 	}
 	
@@ -116,6 +128,8 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 		int dy = gridY - currentMouseGridY;
 		if(field.isSelected()){
 			if(dx != 0 || dy != 0){
+				FieldState prev = field.getFieldState();
+				
 				if(dx == -1)
 					field.moveLeft();
 				else if(dx == 1)
@@ -126,7 +140,9 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 				else if(dy == 1)
 					field.moveDown();
 				
-				fieldDrawer.draw(field.getFieldState(), false);
+				FieldState current = field.getFieldState();
+				
+				moveDrawer.draw(current, prev, false);
 				
 				System.out.println("moved");
 			}		
