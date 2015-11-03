@@ -28,11 +28,11 @@ public class SimpleFieldDrawer extends AppletFieldDrawer{
 
 	private void drawBlock(Graphics g, int x, int y, FieldState fState){
 		BlockColor color = fState.get(x, y);
-		Cursor cursor = fState.getCursor();
-		if(cursor.selected && cursor.x == x && cursor.y == y){
-			g.setColor(Color.MAGENTA);
-			g.fillRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
-		}
+//		Cursor cursor = fState.getCursor();
+//		if(cursor.selected && cursor.x == x && cursor.y == y){
+//			g.setColor(Color.MAGENTA);
+//			g.fillRect(x * blockWidth, y * blockHeight, blockWidth, blockHeight);
+//		}
 		drawBlockImage(g,color,x * blockWidth,y * blockHeight,blockWidth,blockHeight);
 		
 	}
