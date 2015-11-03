@@ -28,8 +28,8 @@ public class PuzzleApplet extends Applet implements MouseListener, MouseMotionLi
 	    field = new Field(FIELD_GRIDS_X, FIELD_GRIDS_Y);
 	    
 	    moveDrawer = new BlockMoveDrawer(this,BLOCK_WIDTH, BLOCK_HEIGHT);
-	    fallDrawer = new SimpleFieldDrawer(this,BLOCK_WIDTH,BLOCK_HEIGHT);
-	    eraceDrawer = new SimpleFieldDrawer(this,BLOCK_WIDTH,BLOCK_HEIGHT);
+	    fallDrawer = new BlockFallDrawer(this,BLOCK_WIDTH,BLOCK_HEIGHT);
+	    eraceDrawer = new BlockEraceDrawer(this,BLOCK_WIDTH,BLOCK_HEIGHT);
 	    msgBox = new AppletMessageBox(this, 0, 0);
 	    
 	    addMouseListener(this);
