@@ -8,11 +8,13 @@ public class FieldState{
 	public int height;
 	private BlockColor[][] field;
 	private Cursor cursor;
-	public FieldState(int w, int h,Cursor c){
+	public ErasedBlockInfo[] ebi;
+	public FieldState(int w, int h,Cursor c, ErasedBlockInfo[] iniEbi){
 		field = new BlockColor[h][w];
 		width = w;
 		height = h;
 		cursor = c;
+		ebi = iniEbi;
 	}
 	public void set(BlockColor c, int x, int y){
 		field[y][x] = c;

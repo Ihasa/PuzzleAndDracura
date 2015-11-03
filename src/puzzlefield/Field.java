@@ -45,7 +45,7 @@ public class Field{
 	}
 
 	public FieldState getFieldState(){
-		FieldState state = new FieldState(width, height, (Cursor)cursor.clone());
+		FieldState state = new FieldState(width, height, (Cursor)cursor.clone(),this.ebi);
 		for(int y = 0; y < height; y++){
 			for(int x = 0; x < width; x++){
 				state.set(blocks[y][x].color, x, y);
@@ -129,7 +129,7 @@ public class Field{
 		for(int y = 0; y < height; y++){
 			for(int x = 0; x < width; x++){
 				if(blocks[y][x].eraseable){
-					ErasedBlockInfo ebi = new ErasedBlockInfo(blocks[y][x].color, 0);
+					ErasedBlockInfo ebi = new ErasedBlockInfo(blocks[y][x].color);
 					eraseSub(x,y,ebi);
 					result.add(ebi);
 				}
@@ -140,7 +140,8 @@ public class Field{
 	
 	private void eraseSub(int x, int y, ErasedBlockInfo ebi){
 		blocks[y][x].eraseable = false;
-		ebi.blockNum++;
+		//ebi.blockNum++;
+		ebi.addIndex(new FieldIndex(x,y));
 		if(x < width - 1  && blocks[y][x+1].eraseable && blocks[y][x].color == blocks[y][x + 1].color){
 			eraseSub(x+1,y,ebi);
 		}
